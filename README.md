@@ -12,49 +12,39 @@ This part of the 'Live training Spec' process is designed to help guide you thro
 
 ### A. What problem(s) will students learn how to solve? (minimum of 5 problems)
 
-> _Here's an example from the Python for Spreadsheeets Users live session_
->
-> - Key considerations to take in when transitioning from spreadsheets to Python.
-> - The Data Scientist mindset and keys to success in transitioning to Python.
-> - How to import `.xlsx` and `.csv` files into Python using `pandas`.
-> - How to filter a DataFrame using `pandas`.
-> - How to create new columns out of your DataFrame for more interesting features.
-> - Perform exploratory analysis of a DataFrame in `pandas`.
-> - How to clean a DataFrame using `pandas` to make it ready for analysis.
-> - Apply common spreadsheets operations such as pivot tables and vlookups in Python using `pandas`.
-> - Create simple, interesting visualizations using `matplotlib`.
+- Reminders of lazy loading & Spark transformations vs actions
+- Handling scenarios with improper data content (column counts, etc)
+- Splitting column based on content
+- Creating a Spark Schema to speed data loading
+- Joining mutliple dataframes together
+- Working with `monotonically_increasing_id`
+- Using various functions from `pyspark.sql.functions` for data cleaning
+- Using UDFs to clean data entries & calculate statistics
+- Draw boundaries around image contents
 
 
 ### B. What technologies, packages, or functions will students use? Please be exhaustive.
 
-> - pandas
-> - matplotlib
-> - seaborn
+- Spark
+- Python
+- python image library (possibly pillow)
 
 ### C. What terms or jargon will you define?
 
-_Whether during your opening and closing talk or your live training, you might have to define some terms and jargon to walk students through a problem you’re solving. Intuitive explanations using analogies are encouraged._
-
-> _Here's an example from the [Python for Spreadsheeets Users live session](https://www.datacamp.com/resources/webinars/live-training-python-for-spreadsheet-users)._
-> 
-> - Packages: Packages are pieces of software we can import to Python. Similar to how we download, install Excel on MacOs, we import pandas on Python. (You can find it at minute 6:30)
+- Spark Schemas: Much like a relational database schema, Spark dataframes have a schema or description of the columns and the types of data contained within.
+- Parquet: A storage mechanism used in "big data", where data is stored in column format, allowing for easy query and access.
 
 ### D. What mistakes or misconceptions do you expect? 
 
-_To help minimize the amount of Q&As and make your live training re-usable, list out some mistakes and misconceptions you think students might encounter along the way._
+- Remembering the various options available to load CSV data: There are a significant number of options available. Remembering the difference between options like `sep`, `quote`, etc can cause problems if the learner is not used to having documentation available (ie, Spark docs).
 
-> _Here's an example from the [Data Visualization in Python live session](https://www.datacamp.com/resources/webinars/data-visualization-in-python)_
-> 
-> - Anatomy of a matplotlib figure: When calling a matplotlib plot, a figure, axes and plot is being created behind the background. (You can find it at minute 11)
-> - As long as you do understand how plots work behind the scenes, you don't need to memorize syntax to customize your plot. 
+- Understanding that almost everything in Spark is done lazily: Nothing in Spark is actually executed until you run an action, such as `df.count()`, `df.write()`, etc. This can be difficult to troubleshoot if you're not certain what is happening.
 
 ### E. What datasets will you use? 
 
-Live training sessions are designed to walk students through something closer to a real-life data science workflow. Accordingly, the dataset needs to accommodate that user experience. 
-As a rule of thumb, your dataset should always answer yes to the following question: 
-> Is the dataset/problem I’m working on, something an industry data scientist/analyst could work on? 
-
-Check our [datasets to avoid](https://instructor-support.datacamp.com/en/articles/2360699-datasets-to-avoid) list. 
+Stanford ImageNet annotations (Dog breeds)
+(https://assets.datacamp.com/production/repositories/4336/datasets/247833c29f942339d875f68248c115ea506324a3/annotations.csv.gz)
+If possible, mix with ImageNet source data (to illustrate images)
 
 ## Step 2: Who is this session for?
 
@@ -69,34 +59,39 @@ Terms like "beginner" and "expert" mean different things to different people, so
 
 - [ ] Data Consumer
 - [ ] Leader 
-- [ ] Data Analyst
+- [x] Data Analyst
 - [ ] Citizen Data Scientist
-- [ ] Data Scientist
-- [ ] Data Engineer
+- [x] Data Scientist
+- [x] Data Engineer
 - [ ] Database Administrator
 - [ ] Statistician
 - [ ] Machine Learning Scientist
 - [ ] Programmer
 - [ ] Other (please describe)
 
+Typically using Spark for data cleaning means you have to a) have a fair amount of data, b) understand that it needs to be cleaned / filtered / etc and what that means, and c) have something you intend to do with it afterwards. 
+
+- Data Engineers often perform these steps. 
+- Data Scientists may need to clean the data, or provide the list of things that should be cleaned. Understanding what is possible can assist with said list.
+- Data Analysts would be on the cusp for this course, but might have input as a consumer of the data regarding what tasks to perform. 
+
 ### What industries would this apply to?
 
-*List one or more industries that the content would be appropriate for.*
-
+Generally, any industry in need of processing a lot of data where Spark is appropriate would qualify. Specifically, we're looking at batch style processing to clean data to prep for storage or analysis. 
 
 ### What level of expertise should learners have before beginning the live training?
 
 *List three or more examples of skills that you expect learners to have before beginning the live training*
 
-> - Can draw common plot types (scatter, bar, histogram) using matplotlib and interpret them
-> - Can run a linear regression, use it to make predictions, and interpret the coefficients.
-> - Can calculate grouped summary statistics using SELECT queries with GROUP BY clauses.
-
+- Can load a Spark dataframe with data via CSV
+- Understands general python usage, including imports and creation of functions
+- Would have enough data to need a Spark solution and has a general idea what this means
+- Has some knowledge of writing SQL / SQL style queries
 
 ## Step 3: Prerequisites
 
-List any prerequisite courses you think your live training could use from. This could be the live session’s companion course or a course you think students should take before the session. Prerequisites act as a guiding principle for your session and will set the topic framework, but you do not have to limit yourself in the live session to the syntax used in the prerequisite courses.
-
+- Intro to PySpark
+- Cleaning Data with PySpark
 
 ## Step 4: Session Outline
 

@@ -15,19 +15,16 @@ This part of the 'Live training Spec' process is designed to help guide you thro
 - Reminders of lazy loading & Spark transformations vs actions
 - Handling scenarios with improper data content (column counts, etc)
 - Splitting column based on content
-- Creating a Spark Schema to speed data loading
 - Joining mutliple dataframes together
 - Working with `monotonically_increasing_id`
 - Using various functions from `pyspark.sql.functions` for data cleaning
-- Using UDFs to clean data entries & calculate statistics
-- Draw boundaries around image contents
+- Using UDFs to clean data entries
 
 
 ### B. What technologies, packages, or functions will students use? Please be exhaustive.
 
 - Spark
 - Python
-- python image library (possibly pillow)
 
 ### C. What terms or jargon will you define?
 
@@ -42,9 +39,7 @@ This part of the 'Live training Spec' process is designed to help guide you thro
 
 ### E. What datasets will you use? 
 
-Stanford ImageNet annotations (Dog breeds)
-(https://assets.datacamp.com/production/repositories/4336/datasets/247833c29f942339d875f68248c115ea506324a3/annotations.csv.gz)
-If possible, mix with ImageNet source data (to illustrate images)
+Netflix Movie dataset, custom "dirtied"
 
 ## Step 2: Who is this session for?
 
@@ -97,40 +92,44 @@ Generally, any industry in need of processing a lot of data where Spark is appro
 
 A live training session usually begins with an introductory presentation, followed by the live training itself, and an ending presentation. Your live session is expected to be around 2h30m-3h long (including Q&A) with a hard-limit at 3h30m. You can check out our live training content guidelines [here](_LINK_). 
 
+### Introduction Slides
+- Intro to the webinar and instructor
+- Intro to the topics
+  - Define data cleaning
+  - Discuss reasons for using Spark and Python for data cleaning
+  - Illustrate data set and some of the issues loading the data
+  - Review session outline & describe Q&A process
+  
+### Live Training
+#### Spark initialization and load DataFrame
+- Import necessary Spark libraries and Colab helper tools
+- Print our initial data source, illustrating the various problems with it (multiple column counts, odd separators, misformatted columns, etc)
+- Try loading file(s) into Spark DataFrame using `spark.load.csv()`
+- Show current schema using `.printSchema()`
+- Reload file(s) into new Spark DataFrame using `spark.load.csv()` but with custom separator
+- `.printSchema()` again, illustrating a single column DataFrame
+- ** Q&A **
 
-> _Example from [Python for Spreadsheet Users](https://www.datacamp.com/resources/webinars/live-training-python-for-spreadsheet-users)_
->
-> ### Introduction Slides 
-> - Introduction to the webinar and instructor (led by DataCamp TA)
-> - Introduction to the topics
->   - Discuss need to become data fluent
->   - Define data fluency
->   - Discuss how learning Python fits into that and go over session outline
->   - Set expectations about Q&A
->
-> ### Live Training
-> #### Exploratory Data Analysis
-> - Import data and print header of DataFrame `pd.read_excel()`, `.head()`
-> - Glimpse at the data to
->   - Get column types using `.dtypes`
->   - Use `.describe()`, `.info()`
-> - **Q&A** 
-> #### Data Cleaning and making it ready for analysis
-> - Convert date columns to datetime `pd.to_datetime()`
-> - Change column names
-> - Extract year, month from datetime `.strftime()`
-> - Drop an irrelevant column `.drop()`
-> - Fill missing values with `.fillna()`
-> #### Creating a report
-> - First report question: What is our overall sales performance this year? `.groupby()`, `.plt.plot()`
-> - Second report question: What is our overall sales performance this year? `.merge()`, `.groupby()`, `plt.plot()`
-> - Third report question: What is our overall sales performance this year? `.merge()`, `.groupby()`, `plt.plot()`
-> - **Q&A**
->
-> ### Ending slides
-> - Recap of what we learned
-> - The data science mindset
-> - Call to action and course recommendations
+#### Initial Data Cleaning steps
+- Use `.filter()` to remove any comment rows (multiple types of columns)
+- Create a new column using `.withColumn()` with a count of our intended columns
+- Use `.filter()` to remove any rows differing from the intended column count
+- Determine the difference between current DataFrame and original to save off malformed data rows
+- ** Q&A **
+
+#### More Data Cleaning & Formatting
+- Now split the remaining source data into actual DataFrame columns using combination of `.split()`, `.explode()`
+- Use `.withColumnRenamed()` to rename columns to a usable format
+- Create a UDF to split a string
+- Apply the UDF to a combined name field
+- Use `.drop()` to remove any unnecessary columns
+- Add an id field using `.withColumn()` and `pyspark.sql.functions.monotonically_increasing_id()`
+- Review the schema and save out to a Parquet file
+
+#### End slides
+- Recap
+- Course suggestions
+
 
 ## Authoring your session
 
